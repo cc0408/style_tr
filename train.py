@@ -334,6 +334,7 @@ def auto_eval(config, vocab, model_F, test_iters, global_step, temperature):
         gold_text = []
         raw_output = []
         rev_output = []
+        enhance_output = []
         for batch in data_iter:
             inp_tokens = batch.text
             inp_lengths = get_lengths(inp_tokens, eos_idx)
