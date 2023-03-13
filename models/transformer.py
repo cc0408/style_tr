@@ -47,7 +47,7 @@ class StyleTransformer(nn.Module):
 
         style_emb = self.style_embed(style).unsqueeze(1)
         if enhance :
-            style_emb *= 2.0
+            style_emb *= 10.0
 
         enc_input = torch.cat((style_emb, self.embed(inp_tokens, pos_idx[:, :max_enc_len])), 1)
         memory = self.encoder(enc_input, src_mask)
