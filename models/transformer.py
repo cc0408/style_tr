@@ -29,7 +29,7 @@ class StyleTransformer(nn.Module):
         self.decoder = Decoder(num_layers, d_model, len(vocab), h, dropout)
         
     def forward(self, inp_tokens, gold_tokens, inp_lengths, style,
-                generate=False, differentiable_decode=False, temperature=1.0):
+                generate=False, differentiable_decode=False, temperature=1.0, enhance = False):
         batch_size = inp_tokens.size(0)
         max_enc_len = inp_tokens.size(1)
 
@@ -46,6 +46,8 @@ class StyleTransformer(nn.Module):
         tgt_mask = (tgt_mask.tril() == 0).view(1, 1, self.max_length, self.max_length)
 
         style_emb = self.style_embed(style).unsqueeze(1)
+        if enhance :
+            style_emb *= 2.0
 
         enc_input = torch.cat((style_emb, self.embed(inp_tokens, pos_idx[:, :max_enc_len])), 1)
         memory = self.encoder(enc_input, src_mask)

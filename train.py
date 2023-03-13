@@ -350,7 +350,7 @@ def auto_eval(config, vocab, model_F, test_iters, global_step, temperature):
                     differentiable_decode=False,
                     temperature=temperature,
                 )
-            
+
             with torch.no_grad():
                 rev_log_probs = model_F(
                     inp_tokens, 
@@ -361,17 +361,30 @@ def auto_eval(config, vocab, model_F, test_iters, global_step, temperature):
                     differentiable_decode=False,
                     temperature=temperature,
                 )
+            
+            with torch.no_grad():
+                enhance_log_probs = model_F(
+                    inp_tokens,
+                    None,
+                    inp_lengths,
+                    raw_styles,
+                    generate=True,
+                    differentiable_decode=False,
+                    temperature=temperature,
+                    enhance = True,
+                )
                 
             gold_text += tensor2text(vocab, inp_tokens.cpu())
             raw_output += tensor2text(vocab, raw_log_probs.argmax(-1).cpu())
             rev_output += tensor2text(vocab, rev_log_probs.argmax(-1).cpu())
+            enhance_output += tensor2text(vocab, enhance_log_probs.argmax(-1).cpu())
 
-        return gold_text, raw_output, rev_output
+        return gold_text, raw_output, rev_output, enhance_output
 
     pos_iter = test_iters.pos_iter
     neg_iter = test_iters.neg_iter
     
-    gold_text, raw_output, rev_output = zip(inference(neg_iter, 0), inference(pos_iter, 1))
+    gold_text, raw_output, rev_output, enhance_output = zip(inference(neg_iter, 0), inference(pos_iter, 1))
 
 
     evaluator = Evaluator()
@@ -392,6 +405,7 @@ def auto_eval(config, vocab, model_F, test_iters, global_step, temperature):
         print('[raw ]', raw_output[0][idx])
         print('[rev ]', rev_output[0][idx])
         print('[ref ]', ref_text[0][idx])
+        print('[enhance ]', enhance_output[0][idx])
 
     print('*' * 20, '********', '*' * 20)
     
@@ -403,6 +417,7 @@ def auto_eval(config, vocab, model_F, test_iters, global_step, temperature):
         print('[raw ]', raw_output[1][idx])
         print('[rev ]', rev_output[1][idx])
         print('[ref ]', ref_text[1][idx])
+        print('[enhance ]', enhance_output[1][idx])
 
     print('*' * 20, '********', '*' * 20)
 
@@ -435,6 +450,7 @@ def auto_eval(config, vocab, model_F, test_iters, global_step, temperature):
             print('[raw ]', raw_output[0][idx], file=fw)
             print('[rev ]', rev_output[0][idx], file=fw)
             print('[ref ]', ref_text[0][idx], file=fw)
+            print('[enhance ]', enhance_output[0][idx], file=fw)
 
         print('*' * 20, '********', '*' * 20, file=fw)
 
@@ -444,6 +460,7 @@ def auto_eval(config, vocab, model_F, test_iters, global_step, temperature):
             print('[raw ]', raw_output[1][idx], file=fw)
             print('[rev ]', rev_output[1][idx], file=fw)
             print('[ref ]', ref_text[1][idx], file=fw)
+            print('[enhance ]', enhance_output[1][idx], file=fw)
 
         print('*' * 20, '********', '*' * 20, file=fw)
         
