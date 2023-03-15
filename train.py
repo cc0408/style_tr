@@ -387,6 +387,30 @@ def auto_eval(config, vocab, model_F, test_iters, global_step, temperature):
     
     gold_text, raw_output, rev_output, enhance_output = zip(inference(neg_iter, 0), inference(pos_iter, 1))
 
+    for k in range(len(rev_output[0])):
+        idx = k
+        print('*' * 20, 'neg sample', '*' * 20)
+        print('[gold]', gold_text[0][idx])
+        print('[raw ]', raw_output[0][idx])
+        print('[rev ]', rev_output[0][idx])
+        print('[enh ]', enhance_output[0][idx])
+        print('[ref ]', ref_text[0][idx])
+
+    print('*' * 20, '********', '*' * 20)
+    
+
+    for k in range(len(rev_output[1])):
+        idx = k
+        print('*' * 20, 'pos sample', '*' * 20)
+        print('[gold]', gold_text[1][idx])
+        print('[raw ]', raw_output[1][idx])
+        print('[rev ]', rev_output[1][idx])
+        print('[enh ]', enhance_output[1][idx])
+        print('[ref ]', ref_text[1][idx])
+
+    print('*' * 20, '********', '*' * 20)
+    return 0
+
 
     evaluator = Evaluator()
     ref_text = evaluator.yelp_ref
