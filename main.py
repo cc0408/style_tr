@@ -53,11 +53,11 @@ def main():
     model_D = Discriminator(config, vocab).to(config.device)
     print(config.discriminator_method)
     
-    #global_step = 11100
-    #config.save_folder = config.save_path + '/' + 'Mar11222323'
-    #auto_eval(config, vocab, model_F, test_iters, global_step, 1.0)
-    #model_F.load_state_dict(torch.load(config.save_folder + '/ckpts/' + str(global_step) + '_F.pth'))
-    train(config, vocab, model_F, model_D, train_iters, dev_iters, test_iters)
+    global_step = 11100
+    config.save_folder = config.save_path + '/' + 'Mar11222323'
+    auto_eval(config, vocab, model_F, test_iters, global_step, 1.0)
+    model_F.load_state_dict(torch.load(config.save_folder + '/ckpts/' + str(global_step) + '_F.pth'))
+    #train(config, vocab, model_F, model_D, train_iters, dev_iters, test_iters)
     
 
 if __name__ == '__main__':
