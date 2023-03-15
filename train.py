@@ -387,6 +387,7 @@ def auto_eval(config, vocab, model_F, test_iters, global_step, temperature):
     
     gold_text, raw_output, rev_output, enhance_output = zip(inference(neg_iter, 0), inference(pos_iter, 1))
 
+    '''
     for k in range(len(rev_output[0])):
         idx = k
         print('*' * 20, 'neg sample', '*' * 20)
@@ -410,6 +411,7 @@ def auto_eval(config, vocab, model_F, test_iters, global_step, temperature):
 
     print('*' * 20, '********', '*' * 20)
     return 0
+    '''
 
 
     evaluator = Evaluator()
